@@ -170,3 +170,85 @@
         align-self: end;
     }
 }
+
+.tableActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.deleteButton,
+.dangerButton {
+  background-color: var(--color-danger-background);
+  border-color: var(--color-danger-background);
+  color: var(--color-danger-text);
+}
+
+.deleteButton:hover,
+.dangerButton:hover:not(:disabled) {
+  background-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.deleteDialog {
+    width: min(440px, calc(100% - 32px));
+    padding: 0;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-surface);
+}
+
+.deleteDialog::backdrop {
+    background-color: rgb(15 23 42 / 72%);
+    backdrop-filter: blur(3px);
+}
+
+.deleteDialogContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 24px 24px 12px;
+}
+
+.deleteDialogContent h3 {
+    margin: 0 0 8px;
+}
+
+.deleteDialogContent p {
+    margin: 0 0 6px;
+    color: var(--color-text-secondary);
+}
+
+.deleteDialogIcon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--color-error);
+    font-weight: 800;
+    background-color: var(--color-error-soft);
+    border-radius: 50%;
+}
+
+.deleteDialogWarning {
+    font-size: 0.9rem;
+}
+
+.deleteDialog .feedbackMessage {
+    margin: 8px 24px;
+}
+
+.deleteDialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px 24px;
+}
+
+.deleteDialogActions .secondaryButton,
+.deleteDialogActions .dangerButton {
+    min-height: 42px;
+}
