@@ -1,10 +1,25 @@
-import { useState } from 'react'
-import { create } from '../../services/category.service'
+import { useEffect, useState } from 'react'
+import {
+  create,
+  update,
+} from '../../services/category.service'
 
-function CategoryForm({ onCategoryCreated }) {
+function CategoryForm({
+  categoryToEdit,
+  onCategoryCreated,
+  onCategoryUpdated,
+  onCancelEdit,
+}) {
   const [name, setName] = useState('')
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isEditing = Boolean(categoryToEdit)
+
+  useEffect(() => {
+    setName(categoryToEdit?.name ?? '')
+    setError(null)
+  }, [categoryToEdit])
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -20,11 +35,23 @@ function CategoryForm({ onCategoryCreated }) {
       setIsSubmitting(true)
       setError(null)
 
-      const response = await create({
-        name: normalizedName,
-      })
+      if (isEditing) {
+        const response = await update(
+          categoryToEdit.id,
+          {
+            name: normalizedName,
+          },
+        )
 
-      onCategoryCreated(response.data)
+        onCategoryUpdated(response.data)
+      } else {
+        const response = await create({
+          name: normalizedName,
+        })
+
+        onCategoryCreated(response.data)
+      }
+
       setName('')
     } catch (error) {
       setError(error.message)
@@ -43,7 +70,11 @@ function CategoryForm({ onCategoryCreated }) {
         className="categoryForm"
         onSubmit={handleSubmit}
       >
-        <h3>Crear categoría</h3>
+        <h3>
+          {isEditing
+            ? 'Editar categoría'
+            : 'Crear categoría'}
+        </h3>
 
         <div className="formField">
           <label
@@ -66,13 +97,30 @@ function CategoryForm({ onCategoryCreated }) {
           />
         </div>
 
-        <button
-          className="primaryButton"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Guardando...' : 'Crear categoría'}
-        </button>
+        <div className="formActions">
+          <button
+            className="primaryButton"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? 'Guardando...'
+              : isEditing
+                ? 'Guardar cambios'
+                : 'Crear categoría'}
+          </button>
+
+          {isEditing && (
+            <button
+              className="secondaryButton"
+              type="button"
+              onClick={onCancelEdit}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
 
         {error && (
           <p

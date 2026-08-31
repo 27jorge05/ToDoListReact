@@ -3,8 +3,18 @@ import { getAllCategories } from '../../services/category.service'
 import CategoryForm from './CategoryForm'
 import './CategoryList.css'
 
+function sortCategories(categories) {
+  return [...categories].sort(
+    (firstCategory, secondCategory) =>
+      firstCategory.name.localeCompare(
+        secondCategory.name,
+      ),
+  )
+}
+
 function CategoryList() {
   const [categories, setCategories] = useState([])
+  const [categoryToEdit, setCategoryToEdit] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -24,16 +34,39 @@ function CategoryList() {
   }, [])
 
   function handleCategoryCreated(newCategory) {
-    setCategories((currentCategories) => {
-      const updatedCategories = [
+    setCategories((currentCategories) =>
+      sortCategories([
         ...currentCategories,
         newCategory,
-      ]
+      ]),
+    )
+  }
 
-      return updatedCategories.sort((firstCategory, secondCategory) =>
-        firstCategory.name.localeCompare(secondCategory.name),
-      )
+  function handleEditClick(category) {
+    setCategoryToEdit(category)
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
     })
+  }
+
+  function handleCategoryUpdated(updatedCategory) {
+    setCategories((currentCategories) =>
+      sortCategories(
+        currentCategories.map((category) =>
+          category.id === updatedCategory.id
+            ? updatedCategory
+            : category,
+        ),
+      ),
+    )
+
+    setCategoryToEdit(null)
+  }
+
+  function handleCancelEdit() {
+    setCategoryToEdit(null)
   }
 
   if (isLoading) {
@@ -59,13 +92,17 @@ function CategoryList() {
     <section className="categoriesPage">
       <header className="categoriesHeader">
         <h2>Categorías</h2>
+
         <p>
           Organiza tus tareas mediante categorías.
         </p>
       </header>
 
       <CategoryForm
+        categoryToEdit={categoryToEdit}
         onCategoryCreated={handleCategoryCreated}
+        onCategoryUpdated={handleCategoryUpdated}
+        onCancelEdit={handleCancelEdit}
       />
 
       <article className="categoryCard">
@@ -81,6 +118,7 @@ function CategoryList() {
                   <th scope="col">ID</th>
                   <th scope="col">Nombre</th>
                   <th scope="col">Creada</th>
+                  <th scope="col">Acciones</th>
                 </tr>
               </thead>
 
@@ -99,6 +137,18 @@ function CategoryList() {
                       {new Date(
                         category.createdAt,
                       ).toLocaleDateString()}
+                    </td>
+
+                    <td>
+                      <button
+                        className="editButton"
+                        type="button"
+                        onClick={() =>
+                          handleEditClick(category)
+                        }
+                      >
+                        Editar
+                      </button>
                     </td>
                   </tr>
                 ))}
