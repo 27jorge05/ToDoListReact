@@ -13,5 +13,31 @@ export async function getAllCategories() {
         )
     }
 
+
+
+    return response.json()
+}
+
+export async function create(categoryData) {
+    const response = await fetch(API_URL_CATEGORIES, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(categoryData),
+    })
+
+    if (!response.ok) {
+        const errorData = await response.json()
+
+        const errorMessage =
+            errorData.errors?.name?.[0] ??
+            errorData.message ??
+            `Error al crear la categoría: ${response.status}`
+
+        throw new Error(errorMessage)
+    }
+
     return response.json()
 }
