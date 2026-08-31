@@ -1,0 +1,52 @@
+name: Ticket de desarrollo
+description: Trabajo implementable en una rama y un pull request
+title: "[TNN] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objetivo
+      description: Resultado observable que debe producir este ticket.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Alcance y subtareas
+      placeholder: |
+        - [ ] Subtarea 1
+        - [ ] Subtarea 2
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      placeholder: |
+        - [ ] Resultado verificable 1
+        - [ ] Resultado verificable 2
+    validations:
+      required: true
+  - type: input
+    id: dependencies
+    attributes:
+      label: Dependencias
+      description: Tickets que deben estar integrados primero o "Ninguna".
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: Rama propuesta
+      placeholder: feat/NN-descripcion-corta
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Plan de verificación
+      description: Comandos, pruebas manuales y evidencia esperada.
+    validations:
+      required: true
