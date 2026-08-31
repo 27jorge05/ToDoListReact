@@ -1,13 +1,16 @@
-# ToDoList React
+# React + Vite
 
-Frontend React/Vite para consumir la API REST Laravel del proyecto ToDoList.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-El código de la aplicación se creará incrementalmente mediante un ticket, una rama y un pull request. La planificación no adelanta el scaffolding de Vite: ese trabajo corresponde al Ticket 1.
+Currently, two official plugins are available:
 
-## Colaboración
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para conocer el flujo de ramas, commits y pull requests.
+## React Compiler
 
-## Siguiente paso
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Integrar el ticket de preparación y comenzar `T01` desde `main` en la rama `feat/01-vite-scaffold`.
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
