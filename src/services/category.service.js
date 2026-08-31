@@ -41,3 +41,29 @@ export async function create(categoryData) {
 
     return response.json()
 }
+export async function update(categoryId, categoryData) {
+  const response = await fetch(
+    `${API_URL_CATEGORIES}/${categoryId}`,
+    {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(categoryData),
+    },
+  )
+
+  if (!response.ok) {
+    const errorData = await response.json()
+
+    const errorMessage =
+      errorData.errors?.name?.[0] ??
+      errorData.message ??
+      `Error al actualizar la categoría: ${response.status}`
+
+    throw new Error(errorMessage)
+  }
+
+  return response.json()
+}
