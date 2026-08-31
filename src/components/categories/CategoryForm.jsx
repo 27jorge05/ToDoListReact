@@ -38,35 +38,52 @@ function CategoryForm({ onCategoryCreated }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Crear categoría</h2>
+    <article className="categoryCard">
+      <form
+        className="categoryForm"
+        onSubmit={handleSubmit}
+      >
+        <h3>Crear categoría</h3>
 
-      <div>
-        <label htmlFor="categoryName">
-          Nombre
-        </label>
+        <div className="formField">
+          <label
+            className="formLabel"
+            htmlFor="categoryName"
+          >
+            Nombre
+          </label>
 
-        <input
-          id="categoryName"
-          name="name"
-          type="text"
-          value={name}
-          onChange={handleNameChange}
-          maxLength={100}
-          required
-        />
-      </div>
+          <input
+            className="formInput"
+            id="categoryName"
+            name="name"
+            type="text"
+            value={name}
+            onChange={handleNameChange}
+            placeholder="Ejemplo: Trabajo"
+            maxLength={100}
+            required
+          />
+        </div>
 
-      {error && (
-        <p role="alert">
-          {error}
-        </p>
-      )}
+        <button
+          className="primaryButton"
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Guardando...' : 'Crear categoría'}
+        </button>
 
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Guardando...' : 'Crear categoría'}
-      </button>
-    </form>
+        {error && (
+          <p
+            className="feedbackMessage errorMessage"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
+      </form>
+    </article>
   )
 }
 
