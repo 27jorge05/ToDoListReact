@@ -1,22 +1,19 @@
-import { useEffect } from "react"
-import { getAll } from "./services/tarea.service"
-
+import CategoryList from './components/categories/CategoryList'
+import ThemeToggle from './components/ThemeToggle'
 
 function App() {
-  useEffect(() => {
-    async function loadTasks() {
-      try {
-        const response = await getAll()
-        console.log(response)
-      } catch (error) {
-        console.error(error)
-      }
+  return (
+    <div className="app">
+      <header className="appHeader">
+        <h1 className="appBrand">ToDoList</h1>
+        <ThemeToggle />
+      </header>
 
-    }
-    loadTasks()
-  }, [])
-
-  return <h1>Hola Mundo</h1>
+      <main className="appContent">
+        <CategoryList />
+      </main>
+    </div>
+  )
 }
 
 export default App

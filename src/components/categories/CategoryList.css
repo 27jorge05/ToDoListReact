@@ -1,0 +1,254 @@
+.categoriesPage {
+    display: grid;
+    gap: 24px;
+}
+
+.categoriesHeader h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 4vw, 2.25rem);
+}
+
+.categoriesHeader p {
+    margin: 8px 0 0;
+    color: var(--color-text-secondary);
+}
+
+.categoryCard {
+    padding: clamp(18px, 4vw, 28px);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-surface);
+}
+
+.categoryForm {
+    display: grid;
+    gap: 16px;
+}
+
+.categoryForm h3 {
+    margin: 0;
+}
+
+.formField {
+    display: grid;
+    gap: 7px;
+}
+
+.formLabel {
+    font-weight: 600;
+}
+
+.formInput {
+    width: 100%;
+    padding: 11px 12px;
+    color: var(--color-text);
+    background-color: var(--color-surface-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.formInput:focus {
+    border-color: var(--color-primary);
+}
+
+.primaryButton {
+    width: fit-content;
+    padding: 11px 18px;
+    color: #ffffff;
+    font-weight: 700;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 10px;
+}
+
+.primaryButton:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+}
+
+.feedbackMessage {
+    margin: 0;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.errorMessage {
+    color: var(--color-error);
+    background-color: var(--color-error-soft);
+}
+
+.emptyMessage {
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.categoryTableWrapper {
+    overflow-x: auto;
+}
+
+.categoryTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.categoryTable th,
+.categoryTable td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.categoryTable th {
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: var(--color-surface-soft);
+}
+
+.categoryTable tbody tr:hover {
+    background-color: var(--color-surface-soft);
+}
+
+.categoryTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.categoryId {
+    color: var(--color-text-secondary);
+    font-family: monospace;
+}
+
+.categoryName {
+    font-weight: 700;
+}
+
+@media (min-width: 760px) {
+    .categoryForm {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+    }
+
+    .categoryForm h3,
+    .categoryForm .feedbackMessage {
+        grid-column: 1 / -1;
+    }
+
+    .primaryButton {
+        min-height: 43px;
+    }
+}
+
+.formActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.secondaryButton,
+.editButton {
+    padding: 10px 16px;
+    color: var(--color-text);
+    font-weight: 700;
+    background-color: var(--color-surface-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.secondaryButton:hover:not(:disabled),
+.editButton:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.editButton {
+    padding: 7px 12px;
+}
+
+@media (min-width: 760px) {
+    .categoryForm .formActions {
+        align-self: end;
+    }
+}
+
+.tableActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.deleteButton,
+.dangerButton {
+  background-color: var(--color-danger-background);
+  border-color: var(--color-danger-background);
+  color: var(--color-danger-text);
+}
+
+.deleteButton:hover,
+.dangerButton:hover:not(:disabled) {
+  background-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.deleteDialog {
+    width: min(440px, calc(100% - 32px));
+    padding: 0;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-surface);
+}
+
+.deleteDialog::backdrop {
+    background-color: rgb(15 23 42 / 72%);
+    backdrop-filter: blur(3px);
+}
+
+.deleteDialogContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 24px 24px 12px;
+}
+
+.deleteDialogContent h3 {
+    margin: 0 0 8px;
+}
+
+.deleteDialogContent p {
+    margin: 0 0 6px;
+    color: var(--color-text-secondary);
+}
+
+.deleteDialogIcon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--color-error);
+    font-weight: 800;
+    background-color: var(--color-error-soft);
+    border-radius: 50%;
+}
+
+.deleteDialogWarning {
+    font-size: 0.9rem;
+}
+
+.deleteDialog .feedbackMessage {
+    margin: 8px 24px;
+}
+
+.deleteDialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px 24px;
+}
+
+.deleteDialogActions .secondaryButton,
+.deleteDialogActions .dangerButton {
+    min-height: 42px;
+}
