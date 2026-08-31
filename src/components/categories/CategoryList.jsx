@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react'
 import {
     deleteCategory,
     getAllCategories,
+    getOne,
 } from '../../services/category.service'
+
 import CategoryDeleteDialog from './CategoryDeleteDialog'
+import CategoryDetailDialog from './CategoryDetailDialog'
 import CategoryForm from './CategoryForm'
 import './CategoryList.css'
 
@@ -25,6 +28,10 @@ function CategoryList() {
     const [deleteError, setDeleteError] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+    const [categoryDetail, setCategoryDetail] = useState(null)
+    const [isDetailLoading, setIsDetailLoading] = useState(false)
+    const [detailError, setDetailError] = useState(null)
 
     useEffect(() => {
         async function loadCategories() {
@@ -113,6 +120,29 @@ function CategoryList() {
         }
     }
 
+    async function handleDetailClick(categoryId) {
+        try {
+            setSelectedCategoryId(categoryId)
+            setCategoryDetail(null)
+            setDetailError(null)
+            setIsDetailLoading(true)
+
+            const response = await getOne(categoryId)
+
+            setCategoryDetail(response.data)
+        } catch (error) {
+            setDetailError(error.message)
+        } finally {
+            setIsDetailLoading(false)
+        }
+    }
+
+    function handleCloseDetail() {
+        setSelectedCategoryId(null)
+        setCategoryDetail(null)
+        setDetailError(null)
+    }
+
     if (isLoading) {
         return (
             <p className="categoryCard">
@@ -186,6 +216,15 @@ function CategoryList() {
                                         <td>
                                             <div className="tableActions">
                                                 <button
+                                                    className="viewButton"
+                                                    type="button"
+                                                    onClick={() =>
+                                                        handleDetailClick(category.id)
+                                                    }
+                                                >
+                                                    Ver detalle
+                                                </button>
+                                                <button
                                                     className="editButton"
                                                     type="button"
                                                     onClick={() =>
@@ -219,6 +258,13 @@ function CategoryList() {
                 error={deleteError}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
+            />
+            <CategoryDetailDialog
+                isOpen={selectedCategoryId !== null}
+                category={categoryDetail}
+                isLoading={isDetailLoading}
+                error={detailError}
+                onClose={handleCloseDetail}
             />
         </section>
     )
