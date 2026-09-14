@@ -1,22 +1,7 @@
-import { useEffect } from "react"
-import { getAll } from "./services/tarea.service"
-
+import CategoryList from './components/categories/CategoryList'
 
 function App() {
-  useEffect(() => {
-    async function loadTasks() {
-      try {
-        const response = await getAll()
-        console.log(response)
-      } catch (error) {
-        console.error(error)
-      }
-
-    }
-    loadTasks()
-  }, [])
-
-  return <h1>Hola Mundo</h1>
+  return <CategoryList />
 }
 
 export default App
