@@ -22,6 +22,10 @@
   --color-success: #15803d;
   --color-success-soft: #dcfce7;
 
+  --color-danger-background: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-text: #ffffff;
+
   --shadow-surface: 0 18px 45px rgb(15 23 42 / 8%);
 }
 
@@ -44,6 +48,10 @@
 
   --color-success: #86efac;
   --color-success-soft: #163c2a;
+
+  --color-danger-background: #ef4444;
+  --color-danger-hover: #f87171;
+  --color-danger-text: #ffffff;
 
   --shadow-surface: 0 18px 45px rgb(0 0 0 / 25%);
 }

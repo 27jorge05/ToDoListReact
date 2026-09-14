@@ -67,3 +67,31 @@ export async function update(categoryId, categoryData) {
 
   return response.json()
 }
+
+export async function deleteCategory(categoryId) {
+  const response = await fetch(
+    `${API_URL_CATEGORIES}/${categoryId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
+
+  if (!response.ok) {
+    let errorMessage =
+      `Error al eliminar la categoría: ${response.status}`
+
+    try {
+      const errorData = await response.json()
+
+      errorMessage =
+        errorData.message ?? errorMessage
+    } catch {
+      // La respuesta de error no contenía JSON.
+    }
+
+    throw new Error(errorMessage)
+  }
+}
