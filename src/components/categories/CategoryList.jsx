@@ -8,7 +8,7 @@ import {
 import CategoryDeleteDialog from './CategoryDeleteDialog'
 import CategoryDetailDialog from './CategoryDetailDialog'
 import CategoryForm from './CategoryForm'
-import './CategoryList.css'
+import '../../styles/resource.css'
 
 
 function sortCategories(categories) {

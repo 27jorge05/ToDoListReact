@@ -128,3 +128,25 @@ input:focus-visible {
   outline: 3px solid var(--color-primary-soft);
   outline-offset: 2px;
 }
+
+
+.appNavigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.appNavigation button {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.appNavigation button:hover,
+.appNavigation button.active {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+}
