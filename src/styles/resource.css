@@ -375,3 +375,101 @@
     gap: 5px;
   }
 }
+
+
+.colorField {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.colorField input[type='color'] {
+  width: 3.5rem;
+  height: 2.5rem;
+  padding: 0.2rem;
+  cursor: pointer;
+}
+
+.tagBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--tag-color);
+  border-radius: 999px;
+  color: var(--tag-color);
+  font-weight: 700;
+}
+
+.tagBadge::before {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--tag-color);
+  content: '';
+}
+
+.resourceDialog {
+  width: min(30rem, calc(100% - 2rem));
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--surface-color);
+  color: var(--text-color);
+}
+
+.resourceDialog::backdrop {
+  background: rgb(15 23 42 / 70%);
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.iconButton {
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+
+.detailList {
+  display: grid;
+  gap: 1rem;
+}
+
+.detailList div {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1rem;
+}
+
+.detailList dt {
+  font-weight: 700;
+}
+
+.detailList dd {
+  margin: 0;
+}
+
+.colorDetail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorPreview {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.dialogWarning {
+  color: var(--danger-color, #dc2626);
+  font-weight: 600;
+}
