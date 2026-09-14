@@ -252,3 +252,126 @@
 .deleteDialogActions .dangerButton {
     min-height: 42px;
 }
+
+.viewButton {
+  padding: 7px 12px;
+  color: var(--color-primary);
+  font-weight: 700;
+  background-color: var(--color-primary-soft);
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+
+.viewButton:hover {
+  border-color: var(--color-primary);
+}
+
+.detailDialog {
+  width: min(520px, calc(100% - 32px));
+  padding: 0;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-surface);
+}
+
+.detailDialog::backdrop {
+  background-color: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(3px);
+}
+
+.detailDialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detailDialogHeader h3 {
+  margin: 3px 0 0;
+  font-size: 1.4rem;
+}
+
+.detailDialogEyebrow {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dialogCloseButton {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--color-text-secondary);
+  font-size: 1.6rem;
+  line-height: 1;
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+}
+
+.dialogCloseButton:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.detailDialogBody {
+  min-height: 150px;
+  padding: 24px;
+}
+
+.categoryDetails {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.categoryDetailItem {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.7fr) 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.categoryDetailItem:first-child {
+  padding-top: 0;
+}
+
+.categoryDetailItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.categoryDetailItem dt {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.categoryDetailItem dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.detailDialogActions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 24px 24px;
+}
+
+@media (max-width: 520px) {
+  .categoryDetailItem {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}

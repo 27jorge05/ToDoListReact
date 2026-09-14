@@ -42,56 +42,75 @@ export async function create(categoryData) {
     return response.json()
 }
 export async function update(categoryId, categoryData) {
-  const response = await fetch(
-    `${API_URL_CATEGORIES}/${categoryId}`,
-    {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(categoryData),
-    },
-  )
+    const response = await fetch(
+        `${API_URL_CATEGORIES}/${categoryId}`,
+        {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(categoryData),
+        },
+    )
 
-  if (!response.ok) {
-    const errorData = await response.json()
+    if (!response.ok) {
+        const errorData = await response.json()
 
-    const errorMessage =
-      errorData.errors?.name?.[0] ??
-      errorData.message ??
-      `Error al actualizar la categoría: ${response.status}`
+        const errorMessage =
+            errorData.errors?.name?.[0] ??
+            errorData.message ??
+            `Error al actualizar la categoría: ${response.status}`
 
-    throw new Error(errorMessage)
-  }
+        throw new Error(errorMessage)
+    }
 
-  return response.json()
+    return response.json()
 }
 
 export async function deleteCategory(categoryId) {
-  const response = await fetch(
-    `${API_URL_CATEGORIES}/${categoryId}`,
-    {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-      },
-    },
-  )
+    const response = await fetch(
+        `${API_URL_CATEGORIES}/${categoryId}`,
+        {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+            },
+        },
+    )
 
-  if (!response.ok) {
-    let errorMessage =
-      `Error al eliminar la categoría: ${response.status}`
+    if (!response.ok) {
+        let errorMessage =
+            `Error al eliminar la categoría: ${response.status}`
 
-    try {
-      const errorData = await response.json()
+        try {
+            const errorData = await response.json()
 
-      errorMessage =
-        errorData.message ?? errorMessage
-    } catch {
-      // La respuesta de error no contenía JSON.
+            errorMessage =
+                errorData.message ?? errorMessage
+        } catch {
+            // La respuesta de error no contenía JSON.
+        }
+
+        throw new Error(errorMessage)
+    }
+}
+export async function getOne(categoryId) {
+    const response = await fetch(
+        `${API_URL_CATEGORIES}/${categoryId}`,
+        {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },
+    )
+
+    if (!response.ok) {
+        throw new Error(
+            `Error al obtener la categoría: ${response.status}`,
+        )
     }
 
-    throw new Error(errorMessage)
-  }
+    return response.json()
 }
