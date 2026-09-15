@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { create, update } from '../../services/tag.service'
+import { createTag, updateTag } from '../../services/tag.service'
 
 const TAG_COLORS = [
     '#2563eb',
@@ -58,9 +58,9 @@ function TagForm({ tagToEdit, onSaved, onCancel }) {
             setError('')
 
             if (isEditing) {
-                await update(tagToEdit.id, tagData)
+                await updateTag(tagToEdit.id, tagData)
             } else {
-                await create(tagData)
+                await createTag(tagData)
             }
 
             setName('')

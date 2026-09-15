@@ -1,187 +1,119 @@
 .categoriesPage {
-    display: grid;
-    gap: 24px;
+  display: grid;
+  gap: 28px;
 }
 
 .categoriesHeader h2 {
-    margin: 0;
-    font-size: clamp(1.7rem, 4vw, 2.25rem);
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.25rem);
 }
 
 .categoriesHeader p {
-    margin: 8px 0 0;
-    color: var(--color-text-secondary);
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
 }
 
 .categoryCard {
-    padding: clamp(18px, 4vw, 28px);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    box-shadow: var(--shadow-surface);
+  padding: clamp(20px, 4vw, 30px);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-surface);
 }
 
-.categoryForm {
-    display: grid;
-    gap: 16px;
+.categoryForm,
+.resourceForm,
+.taskForm {
+  display: grid;
+  gap: 22px;
 }
 
-.categoryForm h3 {
-    margin: 0;
+.categoryForm h3,
+.resourceForm h2 {
+  margin: 0;
 }
 
 .formField {
-    display: grid;
-    gap: 7px;
+  display: grid;
+  gap: 9px;
 }
 
-.formLabel {
-    font-weight: 600;
+.formLabel,
+.resourceForm>label {
+  font-weight: 700;
 }
 
-.formInput {
-    width: 100%;
-    padding: 11px 12px;
-    color: var(--color-text);
-    background-color: var(--color-surface-soft);
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
+.formInput,
+.resourceForm input[type='text'] {
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--color-text);
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
 }
 
-.formInput:focus {
-    border-color: var(--color-primary);
+.formInput:focus,
+.resourceForm input:focus {
+  border-color: var(--color-primary);
 }
 
-.primaryButton {
-    width: fit-content;
-    padding: 11px 18px;
-    color: #ffffff;
-    font-weight: 700;
-    background-color: var(--color-primary);
-    border: none;
-    border-radius: 10px;
+.primaryButton,
+.resourceForm button[type='submit'] {
+  width: fit-content;
+  padding: 11px 18px;
+  color: #ffffff;
+  font-weight: 700;
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
 }
 
-.primaryButton:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
+.primaryButton:hover:not(:disabled),
+.resourceForm button[type='submit']:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
-.feedbackMessage {
-    margin: 0;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-.errorMessage {
-    color: var(--color-error);
-    background-color: var(--color-error-soft);
-}
-
-.emptyMessage {
-    color: var(--color-text-secondary);
-    text-align: center;
-}
-
-.categoryTableWrapper {
-    overflow-x: auto;
-}
-
-.categoryTable {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.categoryTable th,
-.categoryTable td {
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.categoryTable th {
-    color: var(--color-text-secondary);
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: var(--color-surface-soft);
-}
-
-.categoryTable tbody tr:hover {
-    background-color: var(--color-surface-soft);
-}
-
-.categoryTable tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.categoryId {
-    color: var(--color-text-secondary);
-    font-family: monospace;
-}
-
-.categoryName {
-    font-weight: 700;
-}
-
-@media (min-width: 760px) {
-    .categoryForm {
-        grid-template-columns: minmax(0, 1fr) auto;
-        align-items: end;
-    }
-
-    .categoryForm h3,
-    .categoryForm .feedbackMessage {
-        grid-column: 1 / -1;
-    }
-
-    .primaryButton {
-        min-height: 43px;
-    }
+.formActions,
+.tableActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .formActions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  padding-top: 4px;
 }
 
 .secondaryButton,
 .editButton {
-    padding: 10px 16px;
-    color: var(--color-text);
-    font-weight: 700;
-    background-color: var(--color-surface-soft);
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
+  padding: 10px 16px;
+  color: var(--color-text);
+  font-weight: 700;
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
 }
 
 .secondaryButton:hover:not(:disabled),
 .editButton:hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
-.editButton {
-    padding: 7px 12px;
-}
-
-@media (min-width: 760px) {
-    .categoryForm .formActions {
-        align-self: end;
-    }
-}
-
-.tableActions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+.editButton,
+.deleteButton,
+.viewButton {
+  padding: 7px 12px;
 }
 
 .deleteButton,
 .dangerButton {
-  background-color: var(--color-danger-background);
-  border-color: var(--color-danger-background);
   color: var(--color-danger-text);
+  background-color: var(--color-danger-background);
+  border: 1px solid var(--color-danger-background);
+  border-radius: 10px;
 }
 
 .deleteButton:hover,
@@ -190,71 +122,7 @@
   border-color: var(--color-danger-hover);
 }
 
-.deleteDialog {
-    width: min(440px, calc(100% - 32px));
-    padding: 0;
-    color: var(--color-text);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    box-shadow: var(--shadow-surface);
-}
-
-.deleteDialog::backdrop {
-    background-color: rgb(15 23 42 / 72%);
-    backdrop-filter: blur(3px);
-}
-
-.deleteDialogContent {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 24px 24px 12px;
-}
-
-.deleteDialogContent h3 {
-    margin: 0 0 8px;
-}
-
-.deleteDialogContent p {
-    margin: 0 0 6px;
-    color: var(--color-text-secondary);
-}
-
-.deleteDialogIcon {
-    flex: 0 0 auto;
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    color: var(--color-error);
-    font-weight: 800;
-    background-color: var(--color-error-soft);
-    border-radius: 50%;
-}
-
-.deleteDialogWarning {
-    font-size: 0.9rem;
-}
-
-.deleteDialog .feedbackMessage {
-    margin: 8px 24px;
-}
-
-.deleteDialogActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 16px 24px 24px;
-}
-
-.deleteDialogActions .secondaryButton,
-.deleteDialogActions .dangerButton {
-    min-height: 42px;
-}
-
 .viewButton {
-  padding: 7px 12px;
   color: var(--color-primary);
   font-weight: 700;
   background-color: var(--color-primary-soft);
@@ -266,7 +134,67 @@
   border-color: var(--color-primary);
 }
 
-.detailDialog {
+.feedbackMessage {
+  margin: 0;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  background-color: var(--color-error-soft);
+}
+
+.emptyMessage {
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.categoryTableWrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.categoryTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.categoryTable th,
+.categoryTable td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.categoryTable th {
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-surface-soft);
+}
+
+.categoryTable tbody tr:hover {
+  background-color: var(--color-surface-soft);
+}
+
+.categoryTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.categoryId {
+  color: var(--color-text-secondary);
+  font-family: monospace;
+}
+
+.categoryName {
+  font-weight: 700;
+}
+
+.deleteDialog,
+.detailDialog,
+.resourceDialog {
   width: min(520px, calc(100% - 32px));
   padding: 0;
   color: var(--color-text);
@@ -276,35 +204,38 @@
   box-shadow: var(--shadow-surface);
 }
 
-.detailDialog::backdrop {
+.deleteDialog::backdrop,
+.detailDialog::backdrop,
+.resourceDialog::backdrop {
   background-color: rgb(15 23 42 / 72%);
   backdrop-filter: blur(3px);
 }
 
-.detailDialogHeader {
+.deleteDialogContent,
+.detailDialogHeader,
+.dialogHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   padding: 24px;
-  border-bottom: 1px solid var(--color-border);
 }
 
-.detailDialogHeader h3 {
-  margin: 3px 0 0;
-  font-size: 1.4rem;
+.deleteDialogActions,
+.detailDialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 24px 24px;
 }
 
-.detailDialogEyebrow {
-  margin: 0;
-  color: var(--color-primary);
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.detailDialogBody,
+.resourceDialog {
+  padding: 24px;
 }
 
-.dialogCloseButton {
+.dialogCloseButton,
+.iconButton {
   display: grid;
   place-items: center;
   width: 36px;
@@ -312,164 +243,227 @@
   padding: 0;
   color: var(--color-text-secondary);
   font-size: 1.6rem;
-  line-height: 1;
   background-color: var(--color-surface-soft);
   border: 1px solid var(--color-border);
   border-radius: 50%;
 }
 
-.dialogCloseButton:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.detailDialogBody {
-  min-height: 150px;
-  padding: 24px;
-}
-
-.categoryDetails {
+.categoryDetails,
+.detailList {
   display: grid;
-  gap: 0;
+  gap: 14px;
   margin: 0;
 }
 
-.categoryDetailItem {
+.categoryDetailItem,
+.detailList div {
   display: grid;
-  grid-template-columns: minmax(130px, 0.7fr) 1fr;
+  grid-template-columns: minmax(120px, 0.7fr) 1fr;
   gap: 16px;
-  padding: 14px 0;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--color-border);
 }
 
-.categoryDetailItem:first-child {
-  padding-top: 0;
-}
-
-.categoryDetailItem:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.categoryDetailItem dt {
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.categoryDetailItem dd {
+.categoryDetailItem dd,
+.detailList dd {
   margin: 0;
   overflow-wrap: anywhere;
-  font-weight: 600;
 }
 
-.detailDialogActions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 24px 24px;
-}
-
-@media (max-width: 520px) {
-  .categoryDetailItem {
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
-}
-
-
-.colorField {
+.colorField,
+.colorDetail {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .colorField input[type='color'] {
-  width: 3.5rem;
-  height: 2.5rem;
-  padding: 0.2rem;
+  width: 56px;
+  height: 42px;
+  padding: 3px;
   cursor: pointer;
 }
 
 .tagBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0.7rem;
-  border: 1px solid var(--tag-color);
-  border-radius: 999px;
+  gap: 7px;
+  padding: 6px 11px;
   color: var(--tag-color);
   font-weight: 700;
+  border: 1px solid var(--tag-color);
+  border-radius: 999px;
 }
 
-.tagBadge::before {
-  width: 0.6rem;
-  height: 0.6rem;
+.tagBadge::before,
+.colorPreview {
+  width: 10px;
+  height: 10px;
+  background-color: var(--tag-color);
   border-radius: 50%;
-  background: var(--tag-color);
   content: '';
 }
 
-.resourceDialog {
-  width: min(30rem, calc(100% - 2rem));
-  padding: 1.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  background: var(--surface-color);
-  color: var(--text-color);
+@media (max-width: 520px) {
+
+  .categoryDetailItem,
+  .detailList div {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
 }
 
-.resourceDialog::backdrop {
-  background: rgb(15 23 42 / 70%);
+.taskPageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.dialogHeader {
+.taskPageHeader h2 {
+  margin: 4px 0 0;
+  font-size: clamp(1.7rem, 4vw, 2.25rem);
+}
+
+.taskPageHeader p:last-child {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+}
+
+.taskForm {
+  gap: 22px;
+}
+
+.taskFormHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.taskFormHeader h2 {
+  margin: 3px 0 0;
+}
+
+.taskDescription {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.taskTagSelect {
+  min-height: 130px;
+}
+
+.fieldHelp {
+  color: var(--color-text-secondary);
+}
+
+.taskTableDescription {
+  max-width: 320px;
+  margin: 5px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.taskTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.taskTag {
+  padding: 4px 8px;
+  color: var(--task-tag-color, var(--color-primary));
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.taskStatus {
+  display: inline-flex;
+  padding: 5px 9px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+.taskStatusPending {
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-soft);
+}
+
+.taskStatusCompleted {
+  color: var(--color-success);
+  background-color: var(--color-success-soft);
+}
+
+@media (max-width: 640px) {
+  .taskPageHeader {
+    flex-direction: column;
+  }
+
+  .taskPageHeader .primaryButton {
+    width: 100%;
+  }
+}
+
+.taskDialog {
+  width: min(680px, calc(100% - 32px));
+  max-height: calc(100vh - 48px);
+  padding: 0;
+  overflow-y: auto;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-surface);
+}
+
+.taskDialog::backdrop {
+  background-color: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(3px);
+}
+
+.taskDialog .taskForm {
+  padding: 24px;
+}
+
+
+.categoryFilterButton {
+  padding: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-align: left;
+  background-color: transparent;
+  border: 0;
+}
+
+.categoryFilterButton:hover {
+  text-decoration: underline;
+}
+
+.activeCategoryFilter {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
+  padding: 14px 16px;
+  color: var(--color-text);
+  background-color: var(--color-primary-soft);
+  border: 1px solid var(--color-primary);
+  border-radius: 12px;
 }
 
-.iconButton {
-  padding: 0.25rem 0.6rem;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font-size: 1.75rem;
-  cursor: pointer;
-}
-
-.detailList {
-  display: grid;
-  gap: 1rem;
-}
-
-.detailList div {
-  display: grid;
-  grid-template-columns: 7rem 1fr;
-  gap: 1rem;
-}
-
-.detailList dt {
-  font-weight: 700;
-}
-
-.detailList dd {
-  margin: 0;
-}
-
-.colorDetail {
+.activeCategoryFilter span {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-.colorPreview {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-}
-
-.dialogWarning {
-  color: var(--danger-color, #dc2626);
-  font-weight: 600;
+@media (max-width: 640px) {
+  .activeCategoryFilter {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }

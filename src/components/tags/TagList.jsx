@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { deleteTag, getAll, getOne } from '../../services/tag.service'
+import { deleteTag, getAllTags, getOneTag } from '../../services/tag.service'
 import '../../styles/resource.css'
 import TagDeleteDialog from './TagDeleteDialog'
 import TagDetailDialog from './TagDetailDialog'
@@ -19,7 +19,7 @@ function TagList() {
             setIsLoading(true)
             setError('')
 
-            const response = await getAll()
+            const response = await getAllTags()
             setTags(response.data ?? [])
         } catch (loadError) {
             setError(loadError.message)
@@ -36,7 +36,7 @@ function TagList() {
         try {
             setError('')
 
-            const response = await getOne(id)
+            const response = await getOneTag(id)
             setSelectedTag(response.data)
         } catch (showError) {
             setError(showError.message)

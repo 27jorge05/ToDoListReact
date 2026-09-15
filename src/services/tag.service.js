@@ -16,7 +16,7 @@ async function getErrorMessage(response, fallbackMessage) {
 }
 
 
-export async function getAll() {
+export async function getAllTags() {
   const response = await fetch(API_URL_TAGS, {
     method: 'GET',
     headers: {
@@ -36,7 +36,7 @@ export async function getAll() {
   return response.json()
 }
 
-export async function getOne(id) {
+export async function getOneTag(id) {
   const response = await fetch(`${API_URL_TAGS}/${id}`, {
     method: 'GET',
     headers: {
@@ -56,7 +56,7 @@ export async function getOne(id) {
   return response.json()
 }
 
-export async function create(tagData) {
+export async function createTag(tagData) {
   const response = await fetch(API_URL_TAGS, {
     method: 'POST',
     headers: {
@@ -78,7 +78,7 @@ export async function create(tagData) {
   return response.json()
 }
 
-export async function update(id, tagData) {
+export async function updateTag(id, tagData) {
   const response = await fetch(`${API_URL_TAGS}/${id}`, {
     method: 'PUT',
     headers: {

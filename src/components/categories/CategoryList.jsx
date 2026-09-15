@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import {
     deleteCategory,
     getAllCategories,
-    getOne,
+    getOneCategory,
 } from '../../services/category.service'
 
 import CategoryDeleteDialog from './CategoryDeleteDialog'
 import CategoryDetailDialog from './CategoryDetailDialog'
 import CategoryForm from './CategoryForm'
 import '../../styles/resource.css'
+
 
 
 function sortCategories(categories) {
@@ -20,7 +21,7 @@ function sortCategories(categories) {
     )
 }
 
-function CategoryList() {
+function CategoryList({ onCategorySelect }) {
     const [categories, setCategories] = useState([])
     const [categoryToEdit, setCategoryToEdit] = useState(null)
     const [categoryToDelete, setCategoryToDelete] = useState(null)
@@ -127,7 +128,7 @@ function CategoryList() {
             setDetailError(null)
             setIsDetailLoading(true)
 
-            const response = await getOne(categoryId)
+            const response = await getOneCategory(categoryId)
 
             setCategoryDetail(response.data)
         } catch (error) {
@@ -204,7 +205,13 @@ function CategoryList() {
                                         </td>
 
                                         <td className="categoryName">
-                                            {category.name}
+                                            <button
+                                                type="button"
+                                                className="categoryFilterButton"
+                                                onClick={() => onCategorySelect(category)}
+                                            >
+                                                {category.name}
+                                            </button>
                                         </td>
 
                                         <td>
