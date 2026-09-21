@@ -72,7 +72,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -90,6 +92,9 @@ button:disabled {
 }
 
 .appHeader {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -104,10 +109,56 @@ button:disabled {
   font-size: 1.25rem;
 }
 
+.appLayout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: calc(100vh - 70px);
+}
+
+.appSidebar {
+  padding: 28px 18px;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sidebarHeader p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.menuButton,
+.sidebarCloseButton {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: var(--color-text);
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.menuButton span {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
 .appContent {
-  width: min(1100px, calc(100% - 32px));
+  width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 32px 0;
+  padding: clamp(24px, 4vw, 48px);
 }
 
 .themeButton {
@@ -124,7 +175,91 @@ button:disabled {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 3px solid var(--color-primary-soft);
   outline-offset: 2px;
+}
+
+
+.appNavigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.appNavigation button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  color: var(--color-text);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.appNavigation button:hover,
+.appNavigation button.active {
+  color: white;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+}
+
+.sidebarBackdrop {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .appHeader {
+    justify-content: flex-start;
+    padding: 12px 16px;
+  }
+
+  .appHeader .themeButton {
+    margin-left: auto;
+    padding-inline: 11px;
+  }
+
+  .menuButton,
+  .sidebarCloseButton {
+    display: grid;
+  }
+
+  .appLayout {
+    display: block;
+  }
+
+  .appSidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: min(290px, 84vw);
+    padding: 24px 18px;
+    box-shadow: var(--shadow-surface);
+    transform: translateX(-100%);
+    transition: transform 180ms ease;
+  }
+
+  .appSidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebarBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: block;
+    padding: 0;
+    background-color: rgb(15 23 42 / 60%);
+    border: 0;
+  }
+
+  .appContent {
+    padding: 24px 16px 40px;
+  }
 }
