@@ -1,15 +1,72 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CategoryList from './components/categories/CategoryList'
 import TagList from './components/tags/TagList'
 import TaskList from './components/tasks/TaskList'
 import ThemeToggle from './components/ThemeToggle'
 import LoginPage from './components/auth/LoginPage'
+import {
+    AUTH_UNAUTHORIZED_EVENT,
+} from './services/auth.events'
+import { getCurrentUser } from './services/auth.service'
+import {
+  getAuthToken,
+  removeAuthToken,
+} from './services/auth.storage'
+
 
 function App() {
   const [activeView, setActiveView] = useState('tasks')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [currentUser, setCurrentUser] = useState(null)
+  const [authStatus, setAuthStatus] = useState('checking')
+
+  useEffect(() => {
+    async function restoreSession() {
+      const token = getAuthToken()
+
+      if (!token) {
+        setAuthStatus('guest')
+        return
+      }
+
+      try {
+        const response = await getCurrentUser()
+
+        setCurrentUser(response.data)
+        setAuthStatus('authenticated')
+      } catch {
+        removeAuthToken()
+        setCurrentUser(null)
+        setAuthStatus('guest')
+      }
+    }
+
+    function handleUnauthorized() {
+      removeAuthToken()
+      setCurrentUser(null)
+      setAuthStatus('guest')
+      setIsSidebarOpen(false)
+    }
+
+    restoreSession()
+
+    window.addEventListener(
+      AUTH_UNAUTHORIZED_EVENT,
+      handleUnauthorized,
+    )
+
+    return () => {
+      window.removeEventListener(
+        AUTH_UNAUTHORIZED_EVENT,
+        handleUnauthorized,
+      )
+    }
+  }, [])
+  function handleLogin(user) {
+    setCurrentUser(user)
+    setAuthStatus('authenticated')
+  }
 
   function handleNavigation(view) {
     if (view === 'tasks') {
@@ -25,9 +82,20 @@ function App() {
     setActiveView('tasks')
     setIsSidebarOpen(false)
   }
-  if (!currentUser) {
+  if (authStatus === 'checking') {
     return (
-      <LoginPage onLogin={setCurrentUser} />
+      <div
+        className="sessionLoading"
+        role="status"
+      >
+        <p>Comprobando sesión...</p>
+      </div>
+    )
+  }
+
+  if (authStatus === 'guest') {
+    return (
+      <LoginPage onLogin={handleLogin} />
     )
   }
 
@@ -46,6 +114,9 @@ function App() {
         </button>
 
         <h1 className="appBrand">ToDoList</h1>
+        <p className="currentUser">
+          {currentUser?.name}
+        </p>
 
         <ThemeToggle />
       </header>

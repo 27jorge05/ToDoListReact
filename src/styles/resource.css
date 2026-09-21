@@ -625,3 +625,16 @@
     width: 100%;
   }
 }
+.sessionLoading {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background);
+}
+
+.sessionLoading p {
+  margin: 0;
+  font-weight: 700;
+}

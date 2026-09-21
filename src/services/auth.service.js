@@ -1,4 +1,8 @@
-import { API_URL_LOGIN } from './service'
+import {
+  API_URL_LOGIN,
+  API_URL_USER,
+} from './service'
+import { apiFetch } from './http.service'
 
 async function getLoginErrorMessage(response) {
   try {
@@ -29,6 +33,25 @@ export async function loginUser(credentials) {
   if (!response.ok) {
     const message = await getLoginErrorMessage(response)
     throw new Error(message)
+  }
+
+  return response.json()
+}
+export async function getCurrentUser() {
+  const response = await apiFetch(
+    API_URL_USER,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `No fue posible verificar la sesión: ${response.status}`,
+    )
   }
 
   return response.json()
