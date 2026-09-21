@@ -3,11 +3,13 @@ import CategoryList from './components/categories/CategoryList'
 import TagList from './components/tags/TagList'
 import TaskList from './components/tasks/TaskList'
 import ThemeToggle from './components/ThemeToggle'
+import LoginPage from './components/auth/LoginPage'
 
 function App() {
   const [activeView, setActiveView] = useState('tasks')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const [currentUser, setCurrentUser] = useState(null)
 
   function handleNavigation(view) {
     if (view === 'tasks') {
@@ -22,6 +24,11 @@ function App() {
     setSelectedCategory(category)
     setActiveView('tasks')
     setIsSidebarOpen(false)
+  }
+  if (!currentUser) {
+    return (
+      <LoginPage onLogin={setCurrentUser} />
+    )
   }
 
   return (
