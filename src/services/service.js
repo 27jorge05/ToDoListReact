@@ -2,3 +2,6 @@ export const API_URL = 'http://localhost:8080/api/v1'
 export const API_URL_TASKS = `${API_URL}/tasks`
 
 export const API_URL_CATEGORIES = `${API_URL}/categories`
+export const API_URL_TAGS = `${API_URL}/tags`
+export const API_URL_LOGIN = `${API_URL}/login`
+export const API_URL_USER = `${API_URL}/user`

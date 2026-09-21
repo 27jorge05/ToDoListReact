@@ -1,25 +1,29 @@
 import { API_URL_CATEGORIES } from "./service";
+import { apiFetch } from './http.service'
+import { buildPageUrl } from './pagination'
 
-export async function getAllCategories() {
-    const response = await fetch(API_URL_CATEGORIES, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-        },
-    })
-    if (!response.ok) {
-        throw new Error(
-            `Error al obtener categorías: ${response.status}`,
-        )
-    }
+export async function getAllCategories(page = 1) {
+  const response = await apiFetch(
+    buildPageUrl(API_URL_CATEGORIES, page),
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
 
+  if (!response.ok) {
+    throw new Error(
+      `Error al obtener categorías: ${response.status}`,
+    )
+  }
 
-
-    return response.json()
+  return response.json()
 }
 
-export async function create(categoryData) {
-    const response = await fetch(API_URL_CATEGORIES, {
+export async function createCategory(categoryData) {
+    const response = await apiFetch(API_URL_CATEGORIES, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -41,8 +45,8 @@ export async function create(categoryData) {
 
     return response.json()
 }
-export async function update(categoryId, categoryData) {
-    const response = await fetch(
+export async function updateCategory(categoryId, categoryData) {
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'PUT',
@@ -69,7 +73,7 @@ export async function update(categoryId, categoryData) {
 }
 
 export async function deleteCategory(categoryId) {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'DELETE',
@@ -95,8 +99,8 @@ export async function deleteCategory(categoryId) {
         throw new Error(errorMessage)
     }
 }
-export async function getOne(categoryId) {
-    const response = await fetch(
+export async function getOneCategory(categoryId) {
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'GET',
