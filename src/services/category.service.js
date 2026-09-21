@@ -18,7 +18,7 @@ export async function getAllCategories() {
     return response.json()
 }
 
-export async function create(categoryData) {
+export async function createCategory(categoryData) {
     const response = await fetch(API_URL_CATEGORIES, {
         method: 'POST',
         headers: {
@@ -41,7 +41,7 @@ export async function create(categoryData) {
 
     return response.json()
 }
-export async function update(categoryId, categoryData) {
+export async function updateCategory(categoryId, categoryData) {
     const response = await fetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
@@ -95,7 +95,7 @@ export async function deleteCategory(categoryId) {
         throw new Error(errorMessage)
     }
 }
-export async function getOne(categoryId) {
+export async function getOneCategory(categoryId) {
     const response = await fetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {

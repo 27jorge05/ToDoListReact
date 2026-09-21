@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
-  create,
-  update,
+  createCategory,
+  updateCategory,
 } from '../../services/category.service'
 
 function CategoryForm({
@@ -36,7 +36,7 @@ function CategoryForm({
       setError(null)
 
       if (isEditing) {
-        const response = await update(
+        const response = await updateCategory(
           categoryToEdit.id,
           {
             name: normalizedName,
@@ -45,7 +45,7 @@ function CategoryForm({
 
         onCategoryUpdated(response.data)
       } else {
-        const response = await create({
+        const response = await createCategory({
           name: normalizedName,
         })
 
