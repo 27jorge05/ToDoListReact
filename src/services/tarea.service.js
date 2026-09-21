@@ -58,3 +58,28 @@ export async function createTask(taskData) {
 
   return response.json()
 }
+
+export async function updateTask(taskId, taskData) {
+  const response = await fetch(
+    `${API_URL_TASKS}/${taskId}`,
+    {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(taskData),
+    },
+  )
+
+  if (!response.ok) {
+    const message = await getErrorMessage(
+      response,
+      `Error al actualizar la tarea: ${response.status}`,
+    )
+
+    throw new Error(message)
+  }
+
+  return response.json()
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getAllTasks } from '../../services/tarea.service'
 import '../../styles/resource.css'
-import TaskCreateDialog from './TaskCreateDialog'
+import TaskFormDialog from './TaskFormDialog'
 
 function TaskList({
     selectedCategory,
@@ -10,6 +10,7 @@ function TaskList({
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const [taskToEdit, setTaskToEdit] = useState(null)
     const [error, setError] = useState('')
 
     async function loadTasks() {
@@ -30,9 +31,25 @@ function TaskList({
         loadTasks()
     }, [])
 
-    async function handleCreated() {
+    async function handleSaved() {
         setIsFormOpen(false)
+        setTaskToEdit(null)
         await loadTasks()
+    }
+
+    function handleCreateClick() {
+        setTaskToEdit(null)
+        setIsFormOpen(true)
+    }
+
+    function handleEditClick(task) {
+        setTaskToEdit(task)
+        setIsFormOpen(true)
+    }
+
+    function handleCloseForm() {
+        setIsFormOpen(false)
+        setTaskToEdit(null)
     }
     const visibleTasks = selectedCategory
         ? tasks.filter(
@@ -54,7 +71,7 @@ function TaskList({
                 <button
                     type="button"
                     className="primaryButton"
-                    onClick={() => setIsFormOpen(true)}
+                    onClick={handleCreateClick}
                 >
                     Nueva tarea
                 </button>
@@ -103,6 +120,7 @@ function TaskList({
                                     <th>Categoría</th>
                                     <th>Etiquetas</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
 
@@ -154,6 +172,15 @@ function TaskList({
                                                     : 'Pendiente'}
                                             </span>
                                         </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="editButton"
+                                                onClick={() => handleEditClick(task)}
+                                            >
+                                                Editar
+                                            </button>
+                                        </td>
                                     </tr>
 
                                 ))}
@@ -162,10 +189,11 @@ function TaskList({
                     </div>
                 )}
             </div>
-            <TaskCreateDialog
+            <TaskFormDialog
                 isOpen={isFormOpen}
-                onCreated={handleCreated}
-                onClose={() => setIsFormOpen(false)}
+                taskToEdit={taskToEdit}
+                onSaved={handleSaved}
+                onClose={handleCloseForm}
             />
         </section>
     )

@@ -1,7 +1,12 @@
 import { useEffect, useRef } from 'react'
 import TaskForm from './TaskForm'
 
-function TaskCreateDialog({ isOpen, onCreated, onClose }) {
+function TaskFormDialog({
+  isOpen,
+  taskToEdit,
+  onSaved,
+  onClose,
+}) {
   const dialogRef = useRef(null)
 
   useEffect(() => {
@@ -26,12 +31,15 @@ function TaskCreateDialog({ isOpen, onCreated, onClose }) {
       className="taskDialog"
       onClose={onClose}
     >
-      <TaskForm
-        onCreated={onCreated}
-        onCancel={handleCancel}
-      />
+      {isOpen && (
+        <TaskForm
+          taskToEdit={taskToEdit}
+          onSaved={onSaved}
+          onCancel={handleCancel}
+        />
+      )}
     </dialog>
   )
 }
 
-export default TaskCreateDialog
+export default TaskFormDialog

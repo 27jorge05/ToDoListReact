@@ -1,18 +1,28 @@
 import { useEffect, useState } from 'react'
 import { getAllCategories } from '../../services/category.service'
 import { getAllTags } from '../../services/tag.service'
-import { createTask } from '../../services/tarea.service'
+import {
+    createTask,
+    updateTask,
+} from '../../services/tarea.service'
 
-function TaskForm({ onCreated, onCancel }) {
+function TaskForm({
+    taskToEdit,
+    onSaved,
+    onCancel,
+}) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [tagIds, setTagIds] = useState([])
+    const [isCompleted, setIsCompleted] = useState(false)
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])
     const [isLoadingCatalogs, setIsLoadingCatalogs] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState('')
+
+    const isEditing = Boolean(taskToEdit)
 
     useEffect(() => {
         async function loadCatalogs() {
@@ -20,10 +30,11 @@ function TaskForm({ onCreated, onCancel }) {
                 setIsLoadingCatalogs(true)
                 setError('')
 
-                const [categoriesResponse, tagsResponse] = await Promise.all([
-                    getAllCategories(),
-                    getAllTags(),
-                ])
+                const [categoriesResponse, tagsResponse] =
+                    await Promise.all([
+                        getAllCategories(),
+                        getAllTags(),
+                    ])
 
                 setCategories(categoriesResponse.data ?? [])
                 setTags(tagsResponse.data ?? [])
@@ -36,6 +47,26 @@ function TaskForm({ onCreated, onCancel }) {
 
         loadCatalogs()
     }, [])
+
+    useEffect(() => {
+        if (taskToEdit) {
+            setTitle(taskToEdit.title)
+            setDescription(taskToEdit.description ?? '')
+            setCategoryId(String(taskToEdit.categoryId))
+            setTagIds(
+                taskToEdit.tags?.map((tag) => tag.id) ?? [],
+            )
+            setIsCompleted(taskToEdit.isCompleted)
+        } else {
+            setTitle('')
+            setDescription('')
+            setCategoryId('')
+            setTagIds([])
+            setIsCompleted(false)
+        }
+
+        setError('')
+    }, [taskToEdit])
 
     function handleTagChange(event) {
         const selectedTagIds = Array.from(
@@ -66,7 +97,7 @@ function TaskForm({ onCreated, onCancel }) {
             categoryId: Number(categoryId),
             title: trimmedTitle,
             description: trimmedDescription || null,
-            isCompleted: false,
+            isCompleted,
             tagIds,
         }
 
@@ -74,8 +105,13 @@ function TaskForm({ onCreated, onCancel }) {
             setIsSaving(true)
             setError('')
 
-            await createTask(taskData)
-            await onCreated()
+            if (isEditing) {
+                await updateTask(taskToEdit.id, taskData)
+            } else {
+                await createTask(taskData)
+            }
+
+            await onSaved()
         } catch (submitError) {
             setError(submitError.message)
         } finally {
@@ -87,8 +123,13 @@ function TaskForm({ onCreated, onCancel }) {
         <form className="taskForm" onSubmit={handleSubmit}>
             <div className="taskFormHeader">
                 <div>
-                    <p className="detailDialogEyebrow">Nueva tarea</p>
-                    <h2>Crear una tarea</h2>
+                    <p className="detailDialogEyebrow">
+                        {isEditing ? 'Modificar tarea' : 'Nueva tarea'}
+                    </p>
+
+                    <h2>
+                        {isEditing ? 'Editar tarea' : 'Crear una tarea'}
+                    </h2>
                 </div>
 
                 <button
@@ -102,11 +143,16 @@ function TaskForm({ onCreated, onCancel }) {
             </div>
 
             {isLoadingCatalogs ? (
-                <p className="emptyMessage">Cargando categorías y etiquetas...</p>
+                <p className="emptyMessage">
+                    Cargando categorías y etiquetas...
+                </p>
             ) : (
                 <>
                     <div className="formField">
-                        <label className="formLabel" htmlFor="taskTitle">
+                        <label
+                            className="formLabel"
+                            htmlFor="taskTitle"
+                        >
                             Título
                         </label>
 
@@ -115,14 +161,20 @@ function TaskForm({ onCreated, onCancel }) {
                             id="taskTitle"
                             type="text"
                             value={title}
-                            onChange={(event) => setTitle(event.target.value)}
+                            onChange={(event) =>
+                                setTitle(event.target.value)
+                            }
                             maxLength="255"
                             placeholder="Ejemplo: Estudiar React"
+                            required
                         />
                     </div>
 
                     <div className="formField">
-                        <label className="formLabel" htmlFor="taskDescription">
+                        <label
+                            className="formLabel"
+                            htmlFor="taskDescription"
+                        >
                             Descripción
                         </label>
 
@@ -130,14 +182,19 @@ function TaskForm({ onCreated, onCancel }) {
                             className="formInput taskDescription"
                             id="taskDescription"
                             value={description}
-                            onChange={(event) => setDescription(event.target.value)}
+                            onChange={(event) =>
+                                setDescription(event.target.value)
+                            }
                             placeholder="Describe qué debes realizar"
                             rows="4"
                         />
                     </div>
 
                     <div className="formField">
-                        <label className="formLabel" htmlFor="taskCategory">
+                        <label
+                            className="formLabel"
+                            htmlFor="taskCategory"
+                        >
                             Categoría
                         </label>
 
@@ -145,12 +202,20 @@ function TaskForm({ onCreated, onCancel }) {
                             className="formInput"
                             id="taskCategory"
                             value={categoryId}
-                            onChange={(event) => setCategoryId(event.target.value)}
+                            onChange={(event) =>
+                                setCategoryId(event.target.value)
+                            }
+                            required
                         >
-                            <option value="">Selecciona una categoría</option>
+                            <option value="">
+                                Selecciona una categoría
+                            </option>
 
                             {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
+                                <option
+                                    key={category.id}
+                                    value={category.id}
+                                >
                                     {category.name}
                                 </option>
                             ))}
@@ -158,7 +223,10 @@ function TaskForm({ onCreated, onCancel }) {
                     </div>
 
                     <div className="formField">
-                        <label className="formLabel" htmlFor="taskTags">
+                        <label
+                            className="formLabel"
+                            htmlFor="taskTags"
+                        >
                             Etiquetas
                         </label>
 
@@ -177,27 +245,52 @@ function TaskForm({ onCreated, onCancel }) {
                         </select>
 
                         <small className="fieldHelp">
-                            Mantén Ctrl presionado para seleccionar varias etiquetas.
+                            Mantén Ctrl presionado para seleccionar varias.
                         </small>
                     </div>
 
+                    {isEditing && (
+                        <label className="checkboxField">
+                            <input
+                                type="checkbox"
+                                checked={isCompleted}
+                                onChange={(event) =>
+                                    setIsCompleted(event.target.checked)
+                                }
+                            />
+
+                            <span>Marcar como completada</span>
+                        </label>
+                    )}
+
                     {categories.length === 0 && (
                         <p className="feedbackMessage errorMessage">
-                            Necesitas crear al menos una categoría antes de crear tareas.
+                            Necesitas crear al menos una categoría.
                         </p>
                     )}
 
                     {error && (
-                        <p className="feedbackMessage errorMessage">{error}</p>
+                        <p
+                            className="feedbackMessage errorMessage"
+                            role="alert"
+                        >
+                            {error}
+                        </p>
                     )}
 
                     <div className="formActions">
                         <button
                             type="submit"
                             className="primaryButton"
-                            disabled={isSaving || categories.length === 0}
+                            disabled={
+                                isSaving || categories.length === 0
+                            }
                         >
-                            {isSaving ? 'Creando...' : 'Crear tarea'}
+                            {isSaving
+                                ? 'Guardando...'
+                                : isEditing
+                                    ? 'Guardar cambios'
+                                    : 'Crear tarea'}
                         </button>
 
                         <button
