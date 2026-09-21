@@ -4,6 +4,8 @@ import '../../styles/resource.css'
 import TagDeleteDialog from './TagDeleteDialog'
 import TagDetailDialog from './TagDetailDialog'
 import TagForm from './TagForm'
+import Pagination from '../common/Pagination'
+
 
 function TagList() {
     const [tags, setTags] = useState([])
@@ -13,14 +15,18 @@ function TagList() {
     const [isLoading, setIsLoading] = useState(true)
     const [isDeleting, setIsDeleting] = useState(false)
     const [error, setError] = useState('')
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState(null)
 
-    async function loadTags() {
+    async function loadTags(pageNumber = page) {
         try {
             setIsLoading(true)
             setError('')
 
-            const response = await getAllTags()
+            const response = await getAllTags(pageNumber)
+
             setTags(response.data ?? [])
+            setPagination(response.meta ?? null)
         } catch (loadError) {
             setError(loadError.message)
         } finally {
@@ -29,8 +35,8 @@ function TagList() {
     }
 
     useEffect(() => {
-        loadTags()
-    }, [])
+        loadTags(page)
+    }, [page])
 
     async function handleShow(id) {
         try {
@@ -50,7 +56,11 @@ function TagList() {
 
             await deleteTag(id)
             setTagToDelete(null)
-            await loadTags()
+            if (tags.length === 1 && page > 1) {
+                setPage((currentPage) => currentPage - 1)
+            } else {
+                await loadTags(page)
+            }
         } catch (deleteError) {
             setError(deleteError.message)
         } finally {
@@ -60,7 +70,7 @@ function TagList() {
 
     async function handleSaved() {
         setTagToEdit(null)
-        await loadTags()
+        await loadTags(page)
     }
 
     return (
@@ -175,8 +185,14 @@ function TagList() {
                 onConfirm={handleDelete}
                 onClose={() => setTagToDelete(null)}
             />
+            <Pagination
+                meta={pagination}
+                isLoading={isLoading}
+                onPageChange={setPage}
+            />
         </section>
     )
 }
 
 export default TagList
+

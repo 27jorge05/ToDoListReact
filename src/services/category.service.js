@@ -1,22 +1,25 @@
 import { API_URL_CATEGORIES } from "./service";
 import { apiFetch } from './http.service'
+import { buildPageUrl } from './pagination'
 
-export async function getAllCategories() {
-    const response = await apiFetch(API_URL_CATEGORIES, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-        },
-    })
-    if (!response.ok) {
-        throw new Error(
-            `Error al obtener categorías: ${response.status}`,
-        )
-    }
+export async function getAllCategories(page = 1) {
+  const response = await apiFetch(
+    buildPageUrl(API_URL_CATEGORIES, page),
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
 
+  if (!response.ok) {
+    throw new Error(
+      `Error al obtener categorías: ${response.status}`,
+    )
+  }
 
-
-    return response.json()
+  return response.json()
 }
 
 export async function createCategory(categoryData) {

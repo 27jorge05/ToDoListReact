@@ -1,5 +1,6 @@
 import { API_URL_TAGS } from './service'
 import { apiFetch } from './http.service'
+import { buildPageUrl } from './pagination'
 
 async function getErrorMessage(response, fallbackMessage) {
   try {
@@ -17,13 +18,16 @@ async function getErrorMessage(response, fallbackMessage) {
 }
 
 
-export async function getAllTags() {
-  const response = await apiFetch(API_URL_TAGS, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
+export async function getAllTags(page = 1) {
+  const response = await apiFetch(
+    buildPageUrl(API_URL_TAGS, page),
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
     },
-  })
+  )
 
   if (!response.ok) {
     const message = await getErrorMessage(
