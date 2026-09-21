@@ -1,4 +1,5 @@
 import { API_URL_TASKS } from './service'
+import { apiFetch } from './http.service'
 
 async function getErrorMessage(response, fallbackMessage) {
   try {
@@ -18,7 +19,7 @@ async function getErrorMessage(response, fallbackMessage) {
 }
 
 export async function getAllTasks() {
-  const response = await fetch(API_URL_TASKS, {
+  const response = await apiFetch(API_URL_TASKS, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -38,7 +39,7 @@ export async function getAllTasks() {
 }
 
 export async function createTask(taskData) {
-  const response = await fetch(API_URL_TASKS, {
+  const response = await apiFetch(API_URL_TASKS, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -60,7 +61,7 @@ export async function createTask(taskData) {
 }
 
 export async function updateTask(taskId, taskData) {
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_URL_TASKS}/${taskId}`,
     {
       method: 'PUT',
@@ -85,7 +86,7 @@ export async function updateTask(taskId, taskData) {
 }
 
 export async function getOneTask(taskId) {
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_URL_TASKS}/${taskId}`,
     {
       method: 'GET',
@@ -108,7 +109,7 @@ export async function getOneTask(taskId) {
 }
 
 export async function deleteTask(taskId) {
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_URL_TASKS}/${taskId}`,
     {
       method: 'DELETE',

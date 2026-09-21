@@ -1,7 +1,8 @@
 import { API_URL_CATEGORIES } from "./service";
+import { apiFetch } from './http.service'
 
 export async function getAllCategories() {
-    const response = await fetch(API_URL_CATEGORIES, {
+    const response = await apiFetch(API_URL_CATEGORIES, {
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -19,7 +20,7 @@ export async function getAllCategories() {
 }
 
 export async function createCategory(categoryData) {
-    const response = await fetch(API_URL_CATEGORIES, {
+    const response = await apiFetch(API_URL_CATEGORIES, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -42,7 +43,7 @@ export async function createCategory(categoryData) {
     return response.json()
 }
 export async function updateCategory(categoryId, categoryData) {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'PUT',
@@ -69,7 +70,7 @@ export async function updateCategory(categoryId, categoryData) {
 }
 
 export async function deleteCategory(categoryId) {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'DELETE',
@@ -96,7 +97,7 @@ export async function deleteCategory(categoryId) {
     }
 }
 export async function getOneCategory(categoryId) {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
             method: 'GET',

@@ -1,4 +1,5 @@
 import { API_URL_TAGS } from './service'
+import { apiFetch } from './http.service'
 
 async function getErrorMessage(response, fallbackMessage) {
   try {
@@ -17,7 +18,7 @@ async function getErrorMessage(response, fallbackMessage) {
 
 
 export async function getAllTags() {
-  const response = await fetch(API_URL_TAGS, {
+  const response = await apiFetch(API_URL_TAGS, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -37,7 +38,7 @@ export async function getAllTags() {
 }
 
 export async function getOneTag(id) {
-  const response = await fetch(`${API_URL_TAGS}/${id}`, {
+  const response = await apiFetch(`${API_URL_TAGS}/${id}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -57,7 +58,7 @@ export async function getOneTag(id) {
 }
 
 export async function createTag(tagData) {
-  const response = await fetch(API_URL_TAGS, {
+  const response = await apiFetch(API_URL_TAGS, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -79,7 +80,7 @@ export async function createTag(tagData) {
 }
 
 export async function updateTag(id, tagData) {
-  const response = await fetch(`${API_URL_TAGS}/${id}`, {
+  const response = await apiFetch(`${API_URL_TAGS}/${id}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -101,7 +102,7 @@ export async function updateTag(id, tagData) {
 }
 
 export async function deleteTag(id) {
-  const response = await fetch(`${API_URL_TAGS}/${id}`, {
+  const response = await apiFetch(`${API_URL_TAGS}/${id}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
