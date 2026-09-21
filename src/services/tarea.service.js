@@ -83,3 +83,26 @@ export async function updateTask(taskId, taskData) {
 
   return response.json()
 }
+
+export async function getOneTask(taskId) {
+  const response = await fetch(
+    `${API_URL_TASKS}/${taskId}`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
+
+  if (!response.ok) {
+    const message = await getErrorMessage(
+      response,
+      `Error al obtener la tarea: ${response.status}`,
+    )
+
+    throw new Error(message)
+  }
+
+  return response.json()
+}
