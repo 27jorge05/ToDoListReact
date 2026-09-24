@@ -1,10 +1,23 @@
 import { API_URL_CATEGORIES } from "./service";
 import { apiFetch } from './http.service'
-import { buildPageUrl } from './pagination'
 
-export async function getAllCategories(page = 1) {
+async function getErrorMessage(response, fallbackMessage) {
+  try {
+    const errorData = await response.json()
+
+    return (
+      errorData.error?.message ??
+      errorData.message ??
+      fallbackMessage
+    )
+  } catch {
+    return fallbackMessage
+  }
+}
+
+export async function getAllCategories() {
   const response = await apiFetch(
-    buildPageUrl(API_URL_CATEGORIES, page),
+    API_URL_CATEGORIES,
     {
       method: 'GET',
       headers: {
@@ -15,11 +28,19 @@ export async function getAllCategories(page = 1) {
 
   if (!response.ok) {
     throw new Error(
-      `Error al obtener categorías: ${response.status}`,
+      await getErrorMessage(
+        response,
+        `Error al obtener categorías: ${response.status}`,
+      ),
     )
   }
 
-  return response.json()
+  const json = await response.json()
+
+  return {
+    data: json.data?.categories ?? [],
+    meta: null,
+  }
 }
 
 export async function createCategory(categoryData) {
@@ -33,23 +54,23 @@ export async function createCategory(categoryData) {
     })
 
     if (!response.ok) {
-        const errorData = await response.json()
-
-        const errorMessage =
-            errorData.errors?.name?.[0] ??
-            errorData.message ??
-            `Error al crear la categoría: ${response.status}`
-
-        throw new Error(errorMessage)
+        throw new Error(
+            await getErrorMessage(
+                response,
+                `Error al crear la categoría: ${response.status}`,
+            ),
+        )
     }
 
-    return response.json()
+    const json = await response.json()
+
+    return { data: json.data?.category }
 }
 export async function updateCategory(categoryId, categoryData) {
     const response = await apiFetch(
         `${API_URL_CATEGORIES}/${categoryId}`,
         {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -59,17 +80,17 @@ export async function updateCategory(categoryId, categoryData) {
     )
 
     if (!response.ok) {
-        const errorData = await response.json()
-
-        const errorMessage =
-            errorData.errors?.name?.[0] ??
-            errorData.message ??
-            `Error al actualizar la categoría: ${response.status}`
-
-        throw new Error(errorMessage)
+        throw new Error(
+            await getErrorMessage(
+                response,
+                `Error al actualizar la categoría: ${response.status}`,
+            ),
+        )
     }
 
-    return response.json()
+    const json = await response.json()
+
+    return { data: json.data?.category }
 }
 
 export async function deleteCategory(categoryId) {
@@ -84,19 +105,12 @@ export async function deleteCategory(categoryId) {
     )
 
     if (!response.ok) {
-        let errorMessage =
-            `Error al eliminar la categoría: ${response.status}`
-
-        try {
-            const errorData = await response.json()
-
-            errorMessage =
-                errorData.message ?? errorMessage
-        } catch {
-            // La respuesta de error no contenía JSON.
-        }
-
-        throw new Error(errorMessage)
+        throw new Error(
+            await getErrorMessage(
+                response,
+                `Error al eliminar la categoría: ${response.status}`,
+            ),
+        )
     }
 }
 export async function getOneCategory(categoryId) {
@@ -112,9 +126,14 @@ export async function getOneCategory(categoryId) {
 
     if (!response.ok) {
         throw new Error(
-            `Error al obtener la categoría: ${response.status}`,
+            await getErrorMessage(
+                response,
+                `Error al obtener la categoría: ${response.status}`,
+            ),
         )
     }
 
-    return response.json()
+    const json = await response.json()
+
+    return { data: json.data?.category }
 }

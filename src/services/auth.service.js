@@ -1,23 +1,47 @@
 import {
   API_URL_LOGIN,
-  API_URL_USER,
+  API_URL_REGISTER,
+  API_URL_LOGOUT,
 } from './service'
-import { apiFetch } from './http.service'
+import { getAuthToken, getAuthUser } from './auth.storage'
 
-async function getLoginErrorMessage(response) {
+async function getAuthErrorMessage(response, actionLabel) {
   try {
     const errorData = await response.json()
 
     return (
-      errorData.errors?.email?.[0] ??
-      errorData.errors?.password?.[0] ??
-      errorData.errors?.deviceName?.[0] ??
+      errorData.error?.message ??
       errorData.message ??
-      `Error al iniciar sesión: ${response.status}`
+      `${actionLabel}: ${response.status}`
     )
   } catch {
-    return `Error al iniciar sesión: ${response.status}`
+    return `${actionLabel}: ${response.status}`
   }
+}
+
+export async function registerUser(userData) {
+  const response = await fetch(API_URL_REGISTER, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+    }),
+  })
+
+  if (!response.ok) {
+    const message = await getAuthErrorMessage(
+      response,
+      'Error al registrarse',
+    )
+    throw new Error(message)
+  }
+
+  return response.json()
 }
 
 export async function loginUser(credentials) {
@@ -27,32 +51,45 @@ export async function loginUser(credentials) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials),
+    body: JSON.stringify({
+      email: credentials.email,
+      password: credentials.password,
+    }),
   })
 
   if (!response.ok) {
-    const message = await getLoginErrorMessage(response)
+    const message = await getAuthErrorMessage(
+      response,
+      'Error al iniciar sesión',
+    )
     throw new Error(message)
   }
 
   return response.json()
 }
-export async function getCurrentUser() {
-  const response = await apiFetch(
-    API_URL_USER,
-    {
-      method: 'GET',
+
+export async function logout() {
+  const token = getAuthToken()
+
+  try {
+    await fetch(API_URL_LOGOUT, {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
       },
-    },
-  )
+    })
+  } catch {
+    // El logout es local: no cancelamos la sesión por un error de red.
+  }
+}
 
-  if (!response.ok) {
-    throw new Error(
-      `No fue posible verificar la sesión: ${response.status}`,
-    )
+export async function getCurrentUser() {
+  const user = getAuthUser()
+
+  if (!user) {
+    throw new Error('No hay una sesión activa.')
   }
 
-  return response.json()
+  return { data: user }
 }

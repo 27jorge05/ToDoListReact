@@ -1,26 +1,9 @@
 import { useEffect, useState } from 'react'
 import { createTag, updateTag } from '../../services/tag.service'
 
-const TAG_COLORS = [
-    '#2563eb',
-    '#16a34a',
-    '#dc2626',
-    '#9333ea',
-    '#ea580c',
-    '#0891b2',
-]
-
-function getRandomTagColor() {
-    const index = Math.floor(Math.random() * TAG_COLORS.length)
-    return TAG_COLORS[index]
-}
-
-
-
 function TagForm({ tagToEdit, onSaved, onCancel }) {
 
     const [name, setName] = useState('')
-    const [color, setColor] = useState(() => getRandomTagColor())
     const [error, setError] = useState('')
     const [isSaving, setIsSaving] = useState(false)
 
@@ -29,10 +12,8 @@ function TagForm({ tagToEdit, onSaved, onCancel }) {
     useEffect(() => {
         if (tagToEdit) {
             setName(tagToEdit.name)
-            setColor(tagToEdit.color ?? getRandomTagColor())
         } else {
             setName('')
-            setColor(getRandomTagColor())
         }
 
         setError('')
@@ -50,7 +31,6 @@ function TagForm({ tagToEdit, onSaved, onCancel }) {
 
         const tagData = {
             name: trimmedName,
-            color,
         }
 
         try {
@@ -64,7 +44,6 @@ function TagForm({ tagToEdit, onSaved, onCancel }) {
             }
 
             setName('')
-            setColor(getRandomTagColor())
             await onSaved()
         } catch (submitError) {
             setError(submitError.message)
@@ -86,19 +65,6 @@ function TagForm({ tagToEdit, onSaved, onCancel }) {
                 maxLength="100"
                 placeholder="Ejemplo: Importante"
             />
-
-            <label htmlFor="tagColor">Color</label>
-
-            <div className="colorField">
-                <input
-                    id="tagColor"
-                    type="color"
-                    value={color}
-                    onChange={(event) => setColor(event.target.value)}
-                />
-
-                <span>{color}</span>
-            </div>
 
             {error && <p className="errorMessage">{error}</p>}
 
