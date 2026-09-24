@@ -106,3 +106,24 @@ export async function getOneTask(taskId) {
 
   return response.json()
 }
+
+export async function deleteTask(taskId) {
+  const response = await fetch(
+    `${API_URL_TASKS}/${taskId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    },
+  )
+
+  if (!response.ok) {
+    const message = await getErrorMessage(
+      response,
+      `Error al eliminar la tarea: ${response.status}`,
+    )
+
+    throw new Error(message)
+  }
+}

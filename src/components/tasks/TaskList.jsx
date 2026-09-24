@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
-import { getAllTasks, getOneTask, } from '../../services/tarea.service'
+import {
+    getAllTasks,
+    getOneTask,
+    deleteTask,
+} from '../../services/tarea.service'
 import '../../styles/resource.css'
 import TaskFormDialog from './TaskFormDialog'
 import TaskDetailDialog from './TaskDetailDialog'
+import TaskDeleteDialog from './TaskDeleteDialog'
 
 function TaskList({
     selectedCategory,
@@ -17,6 +22,9 @@ function TaskList({
     const [taskDetail, setTaskDetail] = useState(null)
     const [isDetailLoading, setIsDetailLoading] = useState(false)
     const [detailError, setDetailError] = useState('')
+    const [taskToDelete, setTaskToDelete] = useState(null)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [deleteError, setDeleteError] = useState('')
 
     async function loadTasks() {
         try {
@@ -76,6 +84,38 @@ function TaskList({
         setSelectedTaskId(null)
         setTaskDetail(null)
         setDetailError('')
+    }
+    function handleDeleteClick(task) {
+        setTaskToDelete(task)
+        setDeleteError('')
+    }
+
+    function handleCancelDelete() {
+        if (!isDeleting) {
+            setTaskToDelete(null)
+            setDeleteError('')
+        }
+    }
+
+    async function handleConfirmDelete(taskId) {
+        try {
+            setIsDeleting(true)
+            setDeleteError('')
+
+            await deleteTask(taskId)
+
+            setTasks((currentTasks) =>
+                currentTasks.filter(
+                    (task) => task.id !== taskId,
+                ),
+            )
+
+            setTaskToDelete(null)
+        } catch (deleteTaskError) {
+            setDeleteError(deleteTaskError.message)
+        } finally {
+            setIsDeleting(false)
+        }
     }
     const visibleTasks = selectedCategory
         ? tasks.filter(
@@ -215,6 +255,13 @@ function TaskList({
                                                 >
                                                     Editar
                                                 </button>
+                                                <button
+                                                    type="button"
+                                                    className="deleteButton"
+                                                    onClick={() => handleDeleteClick(task)}
+                                                >
+                                                    Eliminar
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -238,7 +285,15 @@ function TaskList({
                 error={detailError}
                 onClose={handleCloseDetail}
             />
+            <TaskDeleteDialog
+                task={taskToDelete}
+                isDeleting={isDeleting}
+                error={deleteError}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+            />
         </section>
+
     )
 }
 
