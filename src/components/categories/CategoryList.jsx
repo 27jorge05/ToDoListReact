@@ -9,17 +9,9 @@ import CategoryDeleteDialog from './CategoryDeleteDialog'
 import CategoryDetailDialog from './CategoryDetailDialog'
 import CategoryForm from './CategoryForm'
 import '../../styles/resource.css'
+import Pagination from '../common/Pagination'
 
 
-
-function sortCategories(categories) {
-    return [...categories].sort(
-        (firstCategory, secondCategory) =>
-            firstCategory.name.localeCompare(
-                secondCategory.name,
-            ),
-    )
-}
 
 function CategoryList({ onCategorySelect }) {
     const [categories, setCategories] = useState([])
@@ -33,29 +25,36 @@ function CategoryList({ onCategorySelect }) {
     const [categoryDetail, setCategoryDetail] = useState(null)
     const [isDetailLoading, setIsDetailLoading] = useState(false)
     const [detailError, setDetailError] = useState(null)
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState(null)
 
-    useEffect(() => {
-        async function loadCategories() {
-            try {
-                const response = await getAllCategories()
-                setCategories(response.data)
-            } catch (error) {
-                setError(error.message)
-            } finally {
-                setIsLoading(false)
-            }
+
+    async function loadCategories(pageNumber = page) {
+        try {
+            setIsLoading(true)
+            setError(null)
+
+            const response =
+                await getAllCategories(pageNumber)
+
+            setCategories(response.data ?? [])
+            setPagination(response.meta ?? null)
+        } catch (loadError) {
+            setError(loadError.message)
+        } finally {
+            setIsLoading(false)
         }
+    }
+    useEffect(() => {
+        loadCategories(page)
+    }, [page])
 
-        loadCategories()
-    }, [])
-
-    function handleCategoryCreated(newCategory) {
-        setCategories((currentCategories) =>
-            sortCategories([
-                ...currentCategories,
-                newCategory,
-            ]),
-        )
+    async function handleCategoryCreated() {
+        if (page === 1) {
+            await loadCategories(1)
+        } else {
+            setPage(1)
+        }
     }
 
     function handleEditClick(category) {
@@ -67,18 +66,9 @@ function CategoryList({ onCategorySelect }) {
         })
     }
 
-    function handleCategoryUpdated(updatedCategory) {
-        setCategories((currentCategories) =>
-            sortCategories(
-                currentCategories.map((category) =>
-                    category.id === updatedCategory.id
-                        ? updatedCategory
-                        : category,
-                ),
-            ),
-        )
-
+    async function handleCategoryUpdated() {
         setCategoryToEdit(null)
+        await loadCategories(page)
     }
 
     function handleCancelEdit() {
@@ -103,17 +93,19 @@ function CategoryList({ onCategorySelect }) {
 
             await deleteCategory(categoryId)
 
-            setCategories((currentCategories) =>
-                currentCategories.filter(
-                    (category) => category.id !== categoryId,
-                ),
-            )
+
 
             if (categoryToEdit?.id === categoryId) {
                 setCategoryToEdit(null)
             }
 
             setCategoryToDelete(null)
+
+            if (categories.length === 1 && page > 1) {
+                setPage((currentPage) => currentPage - 1)
+            } else {
+                await loadCategories(page)
+            }
         } catch (error) {
             setDeleteError(error.message)
         } finally {
@@ -258,6 +250,11 @@ function CategoryList({ onCategorySelect }) {
                         </table>
                     </div>
                 )}
+                <Pagination
+                    meta={pagination}
+                    isLoading={isLoading}
+                    onPageChange={setPage}
+                />
             </article>
             <CategoryDeleteDialog
                 category={categoryToDelete}

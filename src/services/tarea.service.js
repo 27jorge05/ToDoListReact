@@ -1,5 +1,6 @@
 import { API_URL_TASKS } from './service'
 import { apiFetch } from './http.service'
+import { buildPageUrl } from './pagination'
 
 async function getErrorMessage(response, fallbackMessage) {
   try {
@@ -18,8 +19,8 @@ async function getErrorMessage(response, fallbackMessage) {
   }
 }
 
-export async function getAllTasks() {
-  const response = await apiFetch(API_URL_TASKS, {
+export async function getAllTasks(page = 1) {
+  const response = await apiFetch(buildPageUrl(API_URL_TASKS,page), {
     method: 'GET',
     headers: {
       Accept: 'application/json',

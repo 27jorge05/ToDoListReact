@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Pagination from '../common/Pagination'
 import {
     getAllTasks,
     getOneTask,
@@ -25,14 +26,18 @@ function TaskList({
     const [taskToDelete, setTaskToDelete] = useState(null)
     const [isDeleting, setIsDeleting] = useState(false)
     const [deleteError, setDeleteError] = useState('')
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState(null)
 
-    async function loadTasks() {
+    async function loadTasks(pageNumber = page) {
         try {
             setIsLoading(true)
             setError('')
 
-            const response = await getAllTasks()
+            const response = await getAllTasks(pageNumber)
+
             setTasks(response.data ?? [])
+            setPagination(response.meta ?? null)
         } catch (loadError) {
             setError(loadError.message)
         } finally {
@@ -41,13 +46,13 @@ function TaskList({
     }
 
     useEffect(() => {
-        loadTasks()
-    }, [])
+        loadTasks(page)
+    }, [page])
 
     async function handleSaved() {
         setIsFormOpen(false)
         setTaskToEdit(null)
-        await loadTasks()
+        await loadTasks(page)
     }
 
     function handleCreateClick() {
@@ -104,11 +109,11 @@ function TaskList({
 
             await deleteTask(taskId)
 
-            setTasks((currentTasks) =>
-                currentTasks.filter(
-                    (task) => task.id !== taskId,
-                ),
-            )
+            if (tasks.length === 1 && page > 1) {
+                setPage((currentPage) => currentPage - 1)
+            } else {
+                await loadTasks(page)
+            }
 
             setTaskToDelete(null)
         } catch (deleteTaskError) {
@@ -291,6 +296,11 @@ function TaskList({
                 error={deleteError}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
+            />
+            <Pagination
+                meta={pagination}
+                isLoading={isLoading}
+                onPageChange={setPage}
             />
         </section>
 
