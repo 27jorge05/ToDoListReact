@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getAllTasks } from '../../services/tarea.service'
+import { getAllTasks, getOneTask, } from '../../services/tarea.service'
 import '../../styles/resource.css'
 import TaskFormDialog from './TaskFormDialog'
+import TaskDetailDialog from './TaskDetailDialog'
 
 function TaskList({
     selectedCategory,
@@ -12,6 +13,10 @@ function TaskList({
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [taskToEdit, setTaskToEdit] = useState(null)
     const [error, setError] = useState('')
+    const [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [taskDetail, setTaskDetail] = useState(null)
+    const [isDetailLoading, setIsDetailLoading] = useState(false)
+    const [detailError, setDetailError] = useState('')
 
     async function loadTasks() {
         try {
@@ -50,6 +55,27 @@ function TaskList({
     function handleCloseForm() {
         setIsFormOpen(false)
         setTaskToEdit(null)
+    }
+    async function handleDetailClick(taskId) {
+        try {
+            setSelectedTaskId(taskId)
+            setTaskDetail(null)
+            setDetailError('')
+            setIsDetailLoading(true)
+
+            const response = await getOneTask(taskId)
+            setTaskDetail(response.data)
+        } catch (showError) {
+            setDetailError(showError.message)
+        } finally {
+            setIsDetailLoading(false)
+        }
+    }
+
+    function handleCloseDetail() {
+        setSelectedTaskId(null)
+        setTaskDetail(null)
+        setDetailError('')
     }
     const visibleTasks = selectedCategory
         ? tasks.filter(
@@ -173,13 +199,23 @@ function TaskList({
                                             </span>
                                         </td>
                                         <td>
-                                            <button
-                                                type="button"
-                                                className="editButton"
-                                                onClick={() => handleEditClick(task)}
-                                            >
-                                                Editar
-                                            </button>
+                                            <div className="tableActions">
+                                                <button
+                                                    type="button"
+                                                    className="viewButton"
+                                                    onClick={() => handleDetailClick(task.id)}
+                                                >
+                                                    Ver detalle
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    className="editButton"
+                                                    onClick={() => handleEditClick(task)}
+                                                >
+                                                    Editar
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
 
@@ -194,6 +230,13 @@ function TaskList({
                 taskToEdit={taskToEdit}
                 onSaved={handleSaved}
                 onClose={handleCloseForm}
+            />
+            <TaskDetailDialog
+                isOpen={selectedTaskId !== null}
+                task={taskDetail}
+                isLoading={isDetailLoading}
+                error={detailError}
+                onClose={handleCloseDetail}
             />
         </section>
     )
