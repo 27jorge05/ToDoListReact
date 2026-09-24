@@ -1,15 +1,30 @@
 import { useState } from 'react'
-import { loginUser } from '../../services/auth.service'
-import { saveAuthToken } from '../../services/auth.storage'
+import {
+    loginUser,
+    registerUser,
+} from '../../services/auth.service'
+import {
+  saveAuthToken,
+  saveAuthUser,
+} from '../../services/auth.storage'
 import ThemeToggle from '../ThemeToggle'
 
-const DEVICE_NAME = 'ToDoList React'
-
 function LoginPage({ onLogin }) {
+  const [mode, setMode] = useState('login')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isRegisterMode = mode === 'register'
+
+  function switchMode(nextMode) {
+    setMode(nextMode)
+    setError('')
+    setName('')
+    setPassword('')
+  }
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -26,17 +41,40 @@ function LoginPage({ onLogin }) {
       return
     }
 
+    if (isRegisterMode && !name.trim()) {
+      setError('El nombre es obligatorio.')
+      return
+    }
+
     try {
       setIsSubmitting(true)
       setError('')
 
+      if (isRegisterMode) {
+        await registerUser({
+          name: name.trim(),
+          email: normalizedEmail,
+          password,
+        })
+
+        const response = await loginUser({
+          email: normalizedEmail,
+          password,
+        })
+
+        saveAuthToken(response.data.token)
+        saveAuthUser(response.data.user)
+        onLogin(response.data.user)
+        return
+      }
+
       const response = await loginUser({
         email: normalizedEmail,
         password,
-        deviceName: DEVICE_NAME,
       })
 
       saveAuthToken(response.data.token)
+      saveAuthUser(response.data.user)
       onLogin(response.data.user)
     } catch (loginError) {
       setError(loginError.message)
@@ -56,14 +94,19 @@ function LoginPage({ onLogin }) {
         <section className="loginCard">
           <div className="loginIntroduction">
             <p className="detailDialogEyebrow">
-              Bienvenido
+              {isRegisterMode ? 'Bienvenido' : 'Bienvenido'}
             </p>
 
-            <h2>Inicia sesión</h2>
+            <h2>
+              {isRegisterMode
+                ? 'Crea tu cuenta'
+                : 'Inicia sesión'}
+            </h2>
 
             <p>
-              Ingresa tus credenciales para administrar
-              tus tareas.
+              {isRegisterMode
+                ? 'Regístrate para administrar tus tareas.'
+                : 'Ingresa tus credenciales para administrar tus tareas.'}
             </p>
           </div>
 
@@ -71,6 +114,31 @@ function LoginPage({ onLogin }) {
             className="loginForm"
             onSubmit={handleSubmit}
           >
+            {isRegisterMode && (
+              <div className="formField">
+                <label
+                  className="formLabel"
+                  htmlFor="registerName"
+                >
+                  Nombre
+                </label>
+
+                <input
+                  className="formInput"
+                  id="registerName"
+                  name="name"
+                  type="text"
+                  value={name}
+                  onChange={(event) =>
+                    setName(event.target.value)
+                  }
+                  placeholder="Tu nombre"
+                  autoComplete="name"
+                  maxLength={100}
+                />
+              </div>
+            )}
+
             <div className="formField">
               <label
                 className="formLabel"
@@ -111,8 +179,13 @@ function LoginPage({ onLogin }) {
                 onChange={(event) =>
                   setPassword(event.target.value)
                 }
-                placeholder="Tu contraseña"
-                autoComplete="current-password"
+                placeholder={isRegisterMode
+                  ? 'Mínimo 8 caracteres'
+                  : 'Tu contraseña'}
+                autoComplete={isRegisterMode
+                  ? 'new-password'
+                  : 'current-password'}
+                minLength={isRegisterMode ? 8 : undefined}
                 required
               />
             </div>
@@ -132,10 +205,33 @@ function LoginPage({ onLogin }) {
               disabled={isSubmitting}
             >
               {isSubmitting
-                ? 'Iniciando sesión...'
-                : 'Iniciar sesión'}
+                ? isRegisterMode
+                  ? 'Registrando...'
+                  : 'Iniciando sesión...'
+                : isRegisterMode
+                  ? 'Crear cuenta'
+                  : 'Iniciar sesión'}
             </button>
           </form>
+
+          <div className="loginSwitch">
+            <p>
+              {isRegisterMode
+                ? '¿Ya tienes cuenta?'
+                : '¿Aún no tienes cuenta?'}
+            </p>
+
+            <button
+              type="button"
+              className="linkButton"
+              disabled={isSubmitting}
+              onClick={() => {
+                switchMode(isRegisterMode ? 'login' : 'register')
+              }}
+            >
+              {isRegisterMode ? 'Inicia sesión' : 'Regístrate'}
+            </button>
+          </div>
         </section>
       </main>
     </div>

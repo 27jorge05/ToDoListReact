@@ -52,7 +52,7 @@ function TaskForm({
         if (taskToEdit) {
             setTitle(taskToEdit.title)
             setDescription(taskToEdit.description ?? '')
-            setCategoryId(String(taskToEdit.categoryId))
+            setCategoryId(taskToEdit.categoryId ?? '')
             setTagIds(
                 taskToEdit.tags?.map((tag) => tag.id) ?? [],
             )
@@ -71,7 +71,7 @@ function TaskForm({
     function handleTagChange(event) {
         const selectedTagIds = Array.from(
             event.target.selectedOptions,
-            (option) => Number(option.value),
+            (option) => option.value,
         )
 
         setTagIds(selectedTagIds)
@@ -94,7 +94,7 @@ function TaskForm({
         }
 
         const taskData = {
-            categoryId: Number(categoryId),
+            categoryId,
             title: trimmedTitle,
             description: trimmedDescription || null,
             isCompleted,

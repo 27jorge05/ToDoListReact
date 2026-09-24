@@ -7,10 +7,11 @@ import LoginPage from './components/auth/LoginPage'
 import {
     AUTH_UNAUTHORIZED_EVENT,
 } from './services/auth.events'
-import { getCurrentUser } from './services/auth.service'
+import { getCurrentUser, logout } from './services/auth.service'
 import {
   getAuthToken,
   removeAuthToken,
+  removeAuthUser,
 } from './services/auth.storage'
 
 
@@ -37,6 +38,7 @@ function App() {
         setAuthStatus('authenticated')
       } catch {
         removeAuthToken()
+        removeAuthUser()
         setCurrentUser(null)
         setAuthStatus('guest')
       }
@@ -44,6 +46,7 @@ function App() {
 
     function handleUnauthorized() {
       removeAuthToken()
+      removeAuthUser()
       setCurrentUser(null)
       setAuthStatus('guest')
       setIsSidebarOpen(false)
@@ -66,6 +69,16 @@ function App() {
   function handleLogin(user) {
     setCurrentUser(user)
     setAuthStatus('authenticated')
+  }
+
+  async function handleLogout() {
+    await logout()
+    removeAuthToken()
+    removeAuthUser()
+    setCurrentUser(null)
+    setAuthStatus('guest')
+    setIsSidebarOpen(false)
+    setSelectedCategory(null)
   }
 
   function handleNavigation(view) {
@@ -114,9 +127,20 @@ function App() {
         </button>
 
         <h1 className="appBrand">ToDoList</h1>
-        <p className="currentUser">
-          {currentUser?.name}
-        </p>
+
+        <div className="appHeaderActions">
+          <p className="currentUser">
+            {currentUser?.name}
+          </p>
+
+          <button
+            type="button"
+            className="logoutButton"
+            onClick={handleLogout}
+          >
+            Salir
+          </button>
+        </div>
 
         <ThemeToggle />
       </header>

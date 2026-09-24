@@ -1,14 +1,12 @@
 import { API_URL_TAGS } from './service'
 import { apiFetch } from './http.service'
-import { buildPageUrl } from './pagination'
 
 async function getErrorMessage(response, fallbackMessage) {
   try {
     const errorData = await response.json()
 
     return (
-      errorData.errors?.name?.[0] ??
-      errorData.errors?.color?.[0] ??
+      errorData.error?.message ??
       errorData.message ??
       fallbackMessage
     )
@@ -17,10 +15,13 @@ async function getErrorMessage(response, fallbackMessage) {
   }
 }
 
+function buildTagPayload(tagData) {
+  return { name: tagData.name }
+}
 
-export async function getAllTags(page = 1) {
+export async function getAllTags() {
   const response = await apiFetch(
-    buildPageUrl(API_URL_TAGS, page),
+    API_URL_TAGS,
     {
       method: 'GET',
       headers: {
@@ -30,15 +31,20 @@ export async function getAllTags(page = 1) {
   )
 
   if (!response.ok) {
-    const message = await getErrorMessage(
-      response,
-      `Error al obtener etiquetas: ${response.status}`,
+    throw new Error(
+      await getErrorMessage(
+        response,
+        `Error al obtener etiquetas: ${response.status}`,
+      ),
     )
-
-    throw new Error(message)
   }
 
-  return response.json()
+  const json = await response.json()
+
+  return {
+    data: json.data?.tags ?? [],
+    meta: null,
+  }
 }
 
 export async function getOneTag(id) {
@@ -50,15 +56,17 @@ export async function getOneTag(id) {
   })
 
   if (!response.ok) {
-    const message = await getErrorMessage(
-      response,
-      `Error al obtener la etiqueta: ${response.status}`,
+    throw new Error(
+      await getErrorMessage(
+        response,
+        `Error al obtener la etiqueta: ${response.status}`,
+      ),
     )
-
-    throw new Error(message)
   }
 
-  return response.json()
+  const json = await response.json()
+
+  return { data: json.data?.tag }
 }
 
 export async function createTag(tagData) {
@@ -68,41 +76,45 @@ export async function createTag(tagData) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(tagData),
+    body: JSON.stringify(buildTagPayload(tagData)),
   })
 
   if (!response.ok) {
-    const message = await getErrorMessage(
-      response,
-      `Error al crear la etiqueta: ${response.status}`,
+    throw new Error(
+      await getErrorMessage(
+        response,
+        `Error al crear la etiqueta: ${response.status}`,
+      ),
     )
-
-    throw new Error(message)
   }
 
-  return response.json()
+  const json = await response.json()
+
+  return { data: json.data?.tag }
 }
 
 export async function updateTag(id, tagData) {
   const response = await apiFetch(`${API_URL_TAGS}/${id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(tagData),
+    body: JSON.stringify(buildTagPayload(tagData)),
   })
 
   if (!response.ok) {
-    const message = await getErrorMessage(
-      response,
-      `Error al actualizar la etiqueta: ${response.status}`,
+    throw new Error(
+      await getErrorMessage(
+        response,
+        `Error al actualizar la etiqueta: ${response.status}`,
+      ),
     )
-
-    throw new Error(message)
   }
 
-  return response.json()
+  const json = await response.json()
+
+  return { data: json.data?.tag }
 }
 
 export async function deleteTag(id) {
@@ -114,11 +126,11 @@ export async function deleteTag(id) {
   })
 
   if (!response.ok) {
-    const message = await getErrorMessage(
-      response,
-      `Error al eliminar la etiqueta: ${response.status}`,
+    throw new Error(
+      await getErrorMessage(
+        response,
+        `Error al eliminar la etiqueta: ${response.status}`,
+      ),
     )
-
-    throw new Error(message)
   }
 }
